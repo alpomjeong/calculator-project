@@ -3,30 +3,10 @@ package com.example.calculator;
 import java.util.ArrayList;
 
 public class ArithmeticCalculator {
-
     private ArrayList<String> resultsHistory = new ArrayList<>();
 
     public double calculate(int a, int b, OperatorType operator) {
-        double result;
-        switch (operator) {
-            case ADD:
-                result = a + b;
-                break;
-            case SUBTRACT:
-                result = a - b;
-                break;
-            case MULTIPLY:
-                result = a * b;
-                break;
-            case DIVIDE:
-                if (b == 0) {
-                    throw new ArithmeticException("나눗셈의 분모는 0이 될 수 없습니다.");
-                }
-                result = (double) a / b;
-                break;
-            default:
-                throw new IllegalArgumentException("잘못된 연산자입니다.");
-        }
+        double result = operator.apply(a, b);
         resultsHistory.add(a + " " + operator.getSymbol() + " " + b + " = " + result);
         return result;
     }
