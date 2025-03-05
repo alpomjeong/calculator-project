@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Calculator calculator = new Calculator();
+        ArithmeticCalculator calculator = new ArithmeticCalculator();
 
         while (true) {
             System.out.print("\n명령을 입력하세요 (연산 / history / clear / removefirst / exit): ");
@@ -15,8 +15,8 @@ public class Main {
             if (command.equals("exit")) {
                 break;
             } else if (command.equals("history")) {
-                ArrayList<String> history = new ArrayList<>(calculator.getResultsHistory());
-                System.out.println("\n현재까지의 연산 기록:");
+                ArrayList<String> history = calculator.getResultsHistory();
+                System.out.println("\n[연산 기록]");
                 if (history.isEmpty()) {
                     System.out.println("기록이 없습니다.");
                 } else {
@@ -26,21 +26,17 @@ public class Main {
                 }
             } else if (command.equals("clear")) {
                 calculator.clearHistory();
-                System.out.println("연산 기록이 초기화되었습니다.");
             } else if (command.equals("removefirst")) {
                 calculator.removeFirstHistory();
             } else {
-                int numberA = 0, numberB = 0;
-                char operator;
+                int numberA, numberB;
+                OperatorType operator;
+
                 try {
                     numberA = Integer.parseInt(command);
                     System.out.print("연산자를 입력하세요 (+, -, *, /): ");
-                    operator = scanner.next().charAt(0);
-
-                    if (operator != '+' && operator != '-' && operator != '*' && operator != '/') {
-                        System.out.println("잘못된 연산자입니다.");
-                        continue;
-                    }
+                    char operatorChar = scanner.next().charAt(0);
+                    operator = OperatorType.fromChar(operatorChar);
 
                     System.out.print("두 번째 숫자를 입력하세요: ");
                     numberB = scanner.nextInt();
@@ -48,16 +44,15 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.out.println("잘못된 입력입니다. 올바른 숫자 또는 명령어를 입력하세요.");
                     continue;
-                } catch (Exception e) {
-                    System.out.println("잘못된 입력입니다. 숫자를 입력하세요.");
-                    scanner.next(); // 입력 버퍼 클리어
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
                     continue;
                 }
 
                 try {
                     double result = calculator.calculate(numberA, numberB, operator);
                     System.out.println("결과: " + result);
-                } catch (ArithmeticException | IllegalArgumentException e) {
+                } catch (ArithmeticException e) {
                     System.out.println(e.getMessage());
                 }
             }

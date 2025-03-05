@@ -2,23 +2,23 @@ package com.example.calculator;
 
 import java.util.ArrayList;
 
-public class Calculator {
+public class ArithmeticCalculator {
 
-    private ArrayList<String> resultsHistory = new ArrayList<>(); // ✅ ArrayList 직접 사용
+    private ArrayList<String> resultsHistory = new ArrayList<>();
 
-    public double calculate(int a, int b, char operator) {
-        double result = 0;
+    public double calculate(int a, int b, OperatorType operator) {
+        double result;
         switch (operator) {
-            case '+':
+            case ADD:
                 result = a + b;
                 break;
-            case '-':
+            case SUBTRACT:
                 result = a - b;
                 break;
-            case '*':
+            case MULTIPLY:
                 result = a * b;
                 break;
-            case '/':
+            case DIVIDE:
                 if (b == 0) {
                     throw new ArithmeticException("나눗셈의 분모는 0이 될 수 없습니다.");
                 }
@@ -27,20 +27,17 @@ public class Calculator {
             default:
                 throw new IllegalArgumentException("잘못된 연산자입니다.");
         }
-        resultsHistory.add(a + " " + operator + " " + b + " = " + result);
+        resultsHistory.add(a + " " + operator.getSymbol() + " " + b + " = " + result);
         return result;
     }
 
     public ArrayList<String> getResultsHistory() {
-        return resultsHistory;
-    }
-
-    public void setResultsHistory(ArrayList<String> resultsHistory) {
-        this.resultsHistory = new ArrayList<>(resultsHistory);
+        return new ArrayList<>(resultsHistory);
     }
 
     public void clearHistory() {
         resultsHistory.clear();
+        System.out.println("연산 기록이 초기화되었습니다.");
     }
 
     public void removeFirstHistory() {
@@ -49,17 +46,6 @@ public class Calculator {
             System.out.println("가장 먼저 추가된 기록이 삭제되었습니다.");
         } else {
             System.out.println("삭제할 기록이 없습니다.");
-        }
-    }
-
-    public void printHistory() {
-        System.out.println("\n[연산 기록]");
-        if (resultsHistory.isEmpty()) {
-            System.out.println("기록이 없습니다.");
-        } else {
-            for (String record : resultsHistory) {
-                System.out.println(record);
-            }
         }
     }
 }
